@@ -1,30 +1,38 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<meta http-equiv="X-UA-Compatible" content="ie=edge" />
-<title>JS Todo</title>
-<link rel="stylesheet" href="index.css" />
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>JS Todo</title>
+    <link rel="stylesheet" href="index.css" />
 </head>
-    <body>
-        <section class="todoapp">
+
+<body>
+    <section class="todoapp">
+        <div>
+            <header class="header">
+                <h1>todos</h1>
+                <input class="new-todo" placeholder="What needs to be done?" value="" />
+            </header>
+            <section class="main">
+                <input class="toggle-all" type="checkbox" />
+                <label for="toggle-all" onclick="allCheckLabel()"></label>
+                <ul class="todo-list"></ul>
+            </section>
+        </div>
+    </section>
+    <template id="list-item-template">
+        <li>
             <div>
-                <header class="header">
-                    <h1>todos</h1>
-                    <input
-                        class="new-todo"
-                        placeholder="What needs to be done?"
-                        value=""
-                    />
-                </header>
-                <section class="main">
-                    <input class="toggle-all" type="checkbox" />
-                    <label for="toggle-all" onclick="allCheckLabel()"></label>
-                    <ul class="todo-list"></ul>
-                </section>
+                <input>
+                <label></label>
+                <button></button>
             </div>
-        </section>
-        <script src="./index.js"></script>
-    </body>
+        </li>
+    </template>
+    <script src="./index.js"></script>
+</body>
+
 </html>
