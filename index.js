@@ -52,7 +52,6 @@ let getId = function (idsDataArray) {
 		}
 	}
 
-
 	return (currentTaskId + 1) + '';
 };
 
