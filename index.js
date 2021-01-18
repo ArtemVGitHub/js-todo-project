@@ -18,18 +18,18 @@ listItemTemplate.querySelector('input').classList.add('toggle');
 listItemTemplate.querySelector('input').setAttribute('type', 'chekbox');
 listItemTemplate.querySelector('button').classList.add('destroy');
 
-let createListItem = function (tasks) {
+const createListItem = function (task) {
 
 	let listItem = listItemTemplate.cloneNode(true);
 
-	listItem.querySelector('label').textContent = tasks.text;
+	listItem.querySelector('label').textContent = task.text;
 
 	return listItem;
 };
 
 const fragment = document.createDocumentFragment();
 
-let renderTasks = function () {
+const renderTasks = function () {
 
 	todoList.textContent = "";
 
@@ -42,7 +42,7 @@ let renderTasks = function () {
 
 renderTasks();
 
-let getId = function (idsDataArray) {
+const getId = function (idsDataArray) {
 
 	let currentTaskId = 0;
 
@@ -55,7 +55,7 @@ let getId = function (idsDataArray) {
 	return (currentTaskId + 1) + '';
 };
 
-let createNewTask = function () {
+const createNewTask = function () {
 
 	let newTask = {
 		id: getId(tasksList),
@@ -67,3 +67,31 @@ let createNewTask = function () {
 };
 
 createNewTask();
+
+const deleteTask = function (arr, id) {
+	var i = 0;
+	while (i < arr.length) {
+		if (arr[i].id === id) {
+			arr.splice(i, 1);
+		} else {
+			++i;
+		}
+	}
+	return arr;
+};
+
+todoList.addEventListener('click', function (event) {
+
+	let closeButtons = todoList.querySelectorAll('.destroy');
+	let closeBtn = event.target;
+
+	if (closeBtn && closeBtn.matches('.destroy')) {
+		for (let i = 0; i < closeButtons.length; i++) {
+			if (closeBtn == closeButtons[i]) {
+				deleteTask(tasksList, tasksList[i].id + '');
+				break;
+			}
+		}
+	}
+	renderTasks();
+});
