@@ -1,6 +1,6 @@
 'use strict';
 
-const tasksList = [
+let tasksList = [
 	{ id: "1", text: "выучить html", completed: true },
 	{ id: "2", text: "выучить css", completed: true },
 	{ id: "3", text: "выучить js", completed: false },
@@ -55,29 +55,31 @@ const getId = function (idsDataArray) {
 	return (currentTaskId + 1) + '';
 };
 
-const createNewTask = function () {
+const createNewTask = function (text) {
 
 	let newTask = {
 		id: getId(tasksList),
-		text: "выучить css",
-		completed: true
+		text: text,
+		completed: false
 	};
 	tasksList.push(newTask);
 	renderTasks();
 };
 
-createNewTask();
+const taskInput = document.querySelector('.new-todo');
 
-const deleteTask = function (arr, id) {
-	var i = 0;
-	while (i < arr.length) {
-		if (arr[i].id === id) {
-			arr.splice(i, 1);
-		} else {
-			++i;
-		}
+taskInput.addEventListener('keydown', function (event) {
+	if (event.code == 'Enter' && taskInput.value !== '') {
+		let taskInputValue = taskInput.value;
+		createNewTask(taskInputValue);
+		taskInput.value = '';
 	}
-	return arr;
+});
+
+
+const deleteTask = function (id) {
+	tasksList = tasksList.filter((task) => task.id !== id);
+	return tasksList;
 };
 
 todoList.addEventListener('click', function (event) {
@@ -88,7 +90,7 @@ todoList.addEventListener('click', function (event) {
 	if (closeBtn && closeBtn.matches('.destroy')) {
 		for (let i = 0; i < closeButtons.length; i++) {
 			if (closeBtn == closeButtons[i]) {
-				deleteTask(tasksList, tasksList[i].id + '');
+				deleteTask(tasksList[i].id + '');
 				break;
 			}
 		}
