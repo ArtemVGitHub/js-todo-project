@@ -30,7 +30,7 @@ const createListItem = function (task) {
 		deleteTask(task.id);
 	});
 	listItem.querySelector('input').addEventListener('click', function (evt) {
-		changeTaskStatus(task, evt.target);
+		toogleTask(task, evt.target);
 	});
 
 	return listItem;
@@ -89,7 +89,7 @@ const deleteTask = function (id) {
 	renderTasks(tasksList);
 };
 
-const changeTaskStatus = function (task, taskCheckElement) {
+const toogleTask = function (task, taskCheckElement) {
 	task.completed = !task.completed;
 	taskCheckElement.checked = task.completed;
 	taskCheckElement.parentElement.parentElement.classList.toggle('completed');
