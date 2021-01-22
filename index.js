@@ -22,9 +22,15 @@ const createListItem = function (task) {
 
 	let listItem = listItemTemplate.cloneNode(true);
 
+	if (task.completed) {
+		listItem.classList.add('completed');
+	}
 	listItem.querySelector('label').textContent = task.text;
 	listItem.querySelector('.destroy').addEventListener('click', function () {
 		deleteTask(task.id);
+	});
+	listItem.querySelector('input').addEventListener('click', function (evt) {
+		changeTaskStatus(task, evt.target);
 	});
 
 	return listItem;
@@ -81,4 +87,10 @@ taskInput.addEventListener('keydown', function (event) {
 const deleteTask = function (id) {
 	tasksList = tasksList.filter((task) => task.id !== id);
 	renderTasks(tasksList);
+};
+
+const changeTaskStatus = function (task, taskCheckElement) {
+	task.completed = !task.completed;
+	taskCheckElement.checked = task.completed;
+	taskCheckElement.parentElement.parentElement.classList.toggle('completed');
 };
