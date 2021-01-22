@@ -23,24 +23,26 @@ const createListItem = function (task) {
 	let listItem = listItemTemplate.cloneNode(true);
 
 	listItem.querySelector('label').textContent = task.text;
+	listItem.querySelector('.destroy').addEventListener('click', function () {
+		deleteTask(task.id);
+	});
 
 	return listItem;
 };
 
+
 const fragment = document.createDocumentFragment();
 
-const renderTasks = function () {
+const renderTasks = function (tasks) {
 
 	todoList.textContent = "";
-
-	for (let i = 0; i < tasksList.length; i++) {
-		fragment.appendChild(createListItem(tasksList[i]));
+	for (let i = 0; i < tasks.length; i++) {
+		fragment.appendChild(createListItem(tasks[i]));
 	}
-
 	todoList.appendChild(fragment);
 };
 
-renderTasks();
+renderTasks(tasksList);
 
 const getId = function (idsDataArray) {
 
@@ -63,7 +65,7 @@ const createNewTask = function (text) {
 		completed: false
 	};
 	tasksList.push(newTask);
-	renderTasks();
+	renderTasks(tasksList);
 };
 
 const taskInput = document.querySelector('.new-todo');
@@ -76,24 +78,7 @@ taskInput.addEventListener('keydown', function (event) {
 	}
 });
 
-
 const deleteTask = function (id) {
 	tasksList = tasksList.filter((task) => task.id !== id);
-	return tasksList;
+	renderTasks(tasksList);
 };
-
-todoList.addEventListener('click', function (event) {
-
-	let closeButtons = todoList.querySelectorAll('.destroy');
-	let closeBtn = event.target;
-
-	if (closeBtn && closeBtn.matches('.destroy')) {
-		for (let i = 0; i < closeButtons.length; i++) {
-			if (closeBtn == closeButtons[i]) {
-				deleteTask(tasksList[i].id + '');
-				break;
-			}
-		}
-	}
-	renderTasks();
-});
