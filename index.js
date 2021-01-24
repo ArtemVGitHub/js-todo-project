@@ -44,7 +44,6 @@ const countActiveTasks = function (tasks) {
 		}
 	};
 	todoCountValue.textContent = activeTasksCounter;
-	console.log(todoCountValue);
 };
 
 
@@ -107,3 +106,15 @@ const toogleTask = function (task, taskCheckElement) {
 	taskCheckElement.parentElement.parentElement.classList.toggle('completed');
 	countActiveTasks(tasksList);
 };
+
+const deleteCompletedTasks = function (tasks) {
+	tasks = tasks.filter((task) => task.completed === false);
+	tasksList = tasks;
+	renderTasks(tasksList);
+};
+
+const clearCompletedButton = document.querySelector('.clear-completed');
+
+clearCompletedButton.addEventListener('click', function () {
+	deleteCompletedTasks(tasksList);
+});
