@@ -1,6 +1,6 @@
 'use strict';
 
-const tasksList = [
+let tasksList = [
 	{ id: "1", text: "выучить html", completed: true },
 	{ id: "2", text: "выучить css", completed: true },
 	{ id: "3", text: "выучить js", completed: false },
@@ -18,31 +18,33 @@ listItemTemplate.querySelector('input').classList.add('toggle');
 listItemTemplate.querySelector('input').setAttribute('type', 'chekbox');
 listItemTemplate.querySelector('button').classList.add('destroy');
 
-let createListItem = function (tasks) {
+const createListItem = function (task) {
 
 	let listItem = listItemTemplate.cloneNode(true);
 
-	listItem.querySelector('label').textContent = tasks.text;
+	listItem.querySelector('label').textContent = task.text;
+	listItem.querySelector('.destroy').addEventListener('click', function () {
+		deleteTask(task.id);
+	});
 
 	return listItem;
 };
 
+
 const fragment = document.createDocumentFragment();
 
-let renderTasks = function () {
+const renderTasks = function (tasks) {
 
 	todoList.textContent = "";
-
-	for (let i = 0; i < tasksList.length; i++) {
-		fragment.appendChild(createListItem(tasksList[i]));
+	for (let i = 0; i < tasks.length; i++) {
+		fragment.appendChild(createListItem(tasks[i]));
 	}
-
 	todoList.appendChild(fragment);
 };
 
-renderTasks();
+renderTasks(tasksList);
 
-let getId = function (idsDataArray) {
+const getId = function (idsDataArray) {
 
 	let currentTaskId = 0;
 
@@ -55,15 +57,28 @@ let getId = function (idsDataArray) {
 	return (currentTaskId + 1) + '';
 };
 
-let createNewTask = function () {
+const createNewTask = function (text) {
 
 	let newTask = {
 		id: getId(tasksList),
-		text: "выучить css",
-		completed: true
+		text: text,
+		completed: false
 	};
 	tasksList.push(newTask);
-	renderTasks();
+	renderTasks(tasksList);
 };
 
-createNewTask();
+const taskInput = document.querySelector('.new-todo');
+
+taskInput.addEventListener('keydown', function (event) {
+	if (event.code == 'Enter' && taskInput.value !== '') {
+		let taskInputValue = taskInput.value;
+		createNewTask(taskInputValue);
+		taskInput.value = '';
+	}
+});
+
+const deleteTask = function (id) {
+	tasksList = tasksList.filter((task) => task.id !== id);
+	renderTasks(tasksList);
+};
