@@ -13,6 +13,7 @@ let tasksList = [
 const todoList = document.querySelector('.todo-list');
 const listItemTemplate = document.querySelector('#list-item-template').content.querySelector('li');
 const todoCountValue = document.querySelector('.todo-count strong');
+const clearCompletedButton = document.querySelector('.clear-completed');
 
 listItemTemplate.querySelector('div').classList.add('view');
 listItemTemplate.querySelector('input').classList.add('toggle');
@@ -46,6 +47,15 @@ const countActiveTasks = function (tasks) {
 	todoCountValue.textContent = activeTasksCounter;
 };
 
+const checkClearCompleted = function (tasks) {
+	for (let i = 0; i < tasks.length; i++) {
+		clearCompletedButton.style = "display: none";
+		if (tasks[i].completed) {
+			clearCompletedButton.style = "display: block";
+			break;
+		}
+	}
+};
 
 const fragment = document.createDocumentFragment();
 
@@ -57,6 +67,7 @@ const renderTasks = function (tasks) {
 	}
 	todoList.appendChild(fragment);
 	countActiveTasks(tasksList);
+	checkClearCompleted(tasksList);
 };
 
 renderTasks(tasksList);
@@ -105,6 +116,7 @@ const toogleTask = function (task, taskCheckElement) {
 	taskCheckElement.checked = task.completed;
 	taskCheckElement.parentElement.parentElement.classList.toggle('completed');
 	countActiveTasks(tasksList);
+	checkClearCompleted(tasksList);
 };
 
 const deleteCompletedTasks = function (tasks) {
@@ -112,8 +124,6 @@ const deleteCompletedTasks = function (tasks) {
 	tasksList = tasks;
 	renderTasks(tasksList);
 };
-
-const clearCompletedButton = document.querySelector('.clear-completed');
 
 clearCompletedButton.addEventListener('click', function () {
 	deleteCompletedTasks(tasksList);
