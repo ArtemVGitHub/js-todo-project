@@ -130,9 +130,6 @@ clearCompletedButton.addEventListener('click', function () {
 	deleteCompletedTasks(tasksList);
 });
 
-// Создаем функцию filterTasks
-// при нажатии на копки фильтров 
-// const filtersLinks = document.querySelectorAll('.filters a');
 const filterTasks = function (tasks, filter) {
 	let sortedTaskList = [];
 
