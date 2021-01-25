@@ -14,6 +14,7 @@ const todoList = document.querySelector('.todo-list');
 const listItemTemplate = document.querySelector('#list-item-template').content.querySelector('li');
 const todoCountValue = document.querySelector('.todo-count strong');
 const clearCompletedButton = document.querySelector('.clear-completed');
+const filtersLinks = document.querySelectorAll('.filters a');
 
 listItemTemplate.querySelector('div').classList.add('view');
 listItemTemplate.querySelector('input').classList.add('toggle');
@@ -128,3 +129,40 @@ const deleteCompletedTasks = function (tasks) {
 clearCompletedButton.addEventListener('click', function () {
 	deleteCompletedTasks(tasksList);
 });
+
+// Создаем функцию filterTasks
+// при нажатии на копки фильтров 
+// const filtersLinks = document.querySelectorAll('.filters a');
+const filterTasks = function (tasks, filter) {
+	let sortedTaskList = [];
+
+	for (let i = 0; i < tasks.length; i++) {
+		switch (filter) {
+			case "Active":
+				if (!tasks[i].completed) {
+					sortedTaskList.push(tasks[i]);
+				}
+				break;
+			case "Completed":
+				if (tasks[i].completed) {
+					sortedTaskList.push(tasks[i]);
+				}
+				break;
+			default:
+				sortedTaskList.push(tasks[i]);
+				break;
+		}
+	};
+	renderTasks(sortedTaskList);
+};
+
+for (let i = 0; i < filtersLinks.length; i++) {
+	filtersLinks[i].addEventListener('click', function (evt) {
+		filtersLinks.forEach(link => {
+			link.classList.remove('selected');
+		});
+		evt.target.classList.add('selected');
+		let filteTitle = evt.target.textContent;
+		filterTasks(tasksList, filteTitle);
+	});
+}
