@@ -14,6 +14,8 @@ const todoList = document.querySelector('.todo-list');
 const listItemTemplate = document.querySelector('#list-item-template').content.querySelector('li');
 const todoCountValue = document.querySelector('.todo-count strong');
 const clearCompletedButton = document.querySelector('.clear-completed');
+const filtersLinks = document.querySelectorAll('.filters a');
+const footerSection = document.querySelector('footer');
 
 listItemTemplate.querySelector('div').classList.add('view');
 listItemTemplate.querySelector('input').classList.add('toggle');
@@ -46,7 +48,6 @@ const countActiveTasks = function (tasks) {
 	};
 	todoCountValue.textContent = activeTasksCounter;
 };
-
 const checkClearCompleted = function (tasks) {
 	for (let i = 0; i < tasks.length; i++) {
 		clearCompletedButton.style = "display: none";
@@ -54,6 +55,13 @@ const checkClearCompleted = function (tasks) {
 			clearCompletedButton.style = "display: block";
 			break;
 		}
+	}
+};
+const checkFooter = function () {
+	if (tasksList.length > 0) {
+		footerSection.style = "display: block";
+	} else {
+		footerSection.style = "display: none";
 	}
 };
 
@@ -68,6 +76,7 @@ const renderTasks = function (tasks) {
 	todoList.appendChild(fragment);
 	countActiveTasks(tasksList);
 	checkClearCompleted(tasksList);
+	checkFooter();
 };
 
 renderTasks(tasksList);
@@ -128,3 +137,28 @@ const deleteCompletedTasks = function (tasks) {
 clearCompletedButton.addEventListener('click', function () {
 	deleteCompletedTasks(tasksList);
 });
+
+const filterTasks = function (tasks, filter) {
+	let sortedTaskList = [];
+	switch (filter) {
+		case "Active":
+			sortedTaskList = tasks.filter((task) => !task.completed);
+			break;
+		case "Completed":
+			sortedTaskList = tasks.filter((task) => task.completed);
+			break;
+		default:
+			sortedTaskList = tasks;
+			break;
+	}
+	renderTasks(sortedTaskList);
+};
+
+const switchFilters = function (evt) {
+	filtersLinks.forEach(link => {
+		link.classList.remove('selected');
+	});
+	evt.target.classList.add('selected');
+	let filteTitle = evt.target.textContent;
+	filterTasks(tasksList, filteTitle);
+};
