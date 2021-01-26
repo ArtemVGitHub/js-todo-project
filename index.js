@@ -12,6 +12,7 @@ let tasksList = [
 
 const todoList = document.querySelector('.todo-list');
 const listItemTemplate = document.querySelector('#list-item-template').content.querySelector('li');
+const todoCountValue = document.querySelector('.todo-count strong');
 
 listItemTemplate.querySelector('div').classList.add('view');
 listItemTemplate.querySelector('input').classList.add('toggle');
@@ -35,6 +36,15 @@ const createListItem = function (task) {
 
 	return listItem;
 };
+const countActiveTasks = function (tasks) {
+	let activeTasksCounter = 0;
+	for (let i = 0; i < tasks.length; i++) {
+		if (!tasks[i].completed) {
+			activeTasksCounter++;
+		}
+	};
+	todoCountValue.textContent = activeTasksCounter;
+};
 
 
 const fragment = document.createDocumentFragment();
@@ -46,6 +56,7 @@ const renderTasks = function (tasks) {
 		fragment.appendChild(createListItem(tasks[i]));
 	}
 	todoList.appendChild(fragment);
+	countActiveTasks(tasksList);
 };
 
 renderTasks(tasksList);
@@ -93,4 +104,5 @@ const toogleTask = function (task, taskCheckElement) {
 	task.completed = !task.completed;
 	taskCheckElement.checked = task.completed;
 	taskCheckElement.parentElement.parentElement.classList.toggle('completed');
+	countActiveTasks(tasksList);
 };
