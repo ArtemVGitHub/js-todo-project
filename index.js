@@ -1,15 +1,5 @@
 'use strict';
 
-let tasksList = [
-	{ id: "1", text: "выучить html", completed: true },
-	{ id: "2", text: "выучить css", completed: true },
-	{ id: "3", text: "выучить js", completed: false },
-	{ id: "4", text: "выучить фреймворк", completed: false },
-	{ id: "5", text: "написать несколько учебных проектов", completed: false },
-	{ id: "6", text: "пройти собеседование", completed: false },
-	{ id: "7", text: "получить работу", completed: false }
-];
-
 const todoList = document.querySelector('.todo-list');
 const listItemTemplate = document.querySelector('#list-item-template').content.querySelector('li');
 const todoCountValue = document.querySelector('.todo-count strong');
@@ -21,6 +11,18 @@ listItemTemplate.querySelector('div').classList.add('view');
 listItemTemplate.querySelector('input').classList.add('toggle');
 listItemTemplate.querySelector('input').setAttribute('type', 'chekbox');
 listItemTemplate.querySelector('button').classList.add('destroy');
+
+
+const getLocalstorage = function () {
+	return JSON.parse(localStorage.getItem('tasksList')) ?? [];
+};
+
+let tasksList = getLocalstorage();
+
+const updateLocalStorage = (tasks) => {
+	localStorage.setItem('tasksList', JSON.stringify(tasks));
+	return JSON.parse(localStorage.getItem('tasksList')) ?? [];
+};
 
 const createListItem = function (task) {
 
@@ -58,11 +60,7 @@ const checkClearCompleted = function (tasks) {
 	}
 };
 const checkFooter = function () {
-	if (tasksList.length > 0) {
-		footerSection.style = "display: block";
-	} else {
-		footerSection.style = "display: none";
-	}
+	footerSection.style = tasksList.length > 0 ? "display: block" : "display: none";
 };
 
 const fragment = document.createDocumentFragment();
@@ -74,9 +72,10 @@ const renderTasks = function (tasks) {
 		fragment.appendChild(createListItem(tasks[i]));
 	}
 	todoList.appendChild(fragment);
-	countActiveTasks(tasksList);
-	checkClearCompleted(tasksList);
+	countActiveTasks(tasks);
+	checkClearCompleted(tasks);
 	checkFooter();
+	updateLocalStorage(tasks);
 };
 
 renderTasks(tasksList);
@@ -126,6 +125,7 @@ const toogleTask = function (task, taskCheckElement) {
 	taskCheckElement.parentElement.parentElement.classList.toggle('completed');
 	countActiveTasks(tasksList);
 	checkClearCompleted(tasksList);
+	updateLocalStorage(tasksList);
 };
 
 const deleteCompletedTasks = function (tasks) {
