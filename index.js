@@ -75,7 +75,7 @@ const renderTasks = function (tasks) {
 	countActiveTasks(tasks);
 	checkClearCompleted(tasks);
 	checkFooter();
-	updateLocalStorage(tasks);
+	updateLocalStorage(tasksList);
 };
 
 renderTasks(tasksList);
@@ -141,10 +141,10 @@ clearCompletedButton.addEventListener('click', function () {
 const filterTasks = function (tasks, filter) {
 	let sortedTaskList = [];
 	switch (filter) {
-		case "Active":
+		case "#/active":
 			sortedTaskList = tasks.filter((task) => !task.completed);
 			break;
-		case "Completed":
+		case "#/completed":
 			sortedTaskList = tasks.filter((task) => task.completed);
 			break;
 		default:
@@ -154,11 +154,27 @@ const filterTasks = function (tasks, filter) {
 	renderTasks(sortedTaskList);
 };
 
-const switchFilters = function (evt) {
+const selectActiveFilter = function (filter) {
 	filtersLinks.forEach(link => {
 		link.classList.remove('selected');
 	});
-	evt.target.classList.add('selected');
-	let filteTitle = evt.target.textContent;
-	filterTasks(tasksList, filteTitle);
+	filter.classList.add('selected');
 };
+
+const switchFilters = function (evt) {
+	selectActiveFilter(evt.target)
+	let filterHref = evt.target.getAttribute('href');
+	filterTasks(tasksList, filterHref);
+};
+
+const checkFilter = function (tasks) {
+	const hash = window.location.hash;
+	filterTasks(tasksList, hash);
+	filtersLinks.forEach(link => {
+		if (link.getAttribute('href') == hash) {
+			selectActiveFilter(link);
+		}
+	});
+};
+
+checkFilter();
