@@ -1,18 +1,5 @@
 'use strict';
 
-const todoList = document.querySelector('.todo-list');
-const listItemTemplate = document.querySelector('#list-item-template').content.querySelector('li');
-const todoCountValue = document.querySelector('.todo-count strong');
-const clearCompletedButton = document.querySelector('.clear-completed');
-const filtersLinks = document.querySelectorAll('.filters a');
-const footerSection = document.querySelector('footer');
-
-listItemTemplate.querySelector('div').classList.add('view');
-listItemTemplate.querySelector('input').classList.add('toggle');
-listItemTemplate.querySelector('input').setAttribute('type', 'chekbox');
-listItemTemplate.querySelector('button').classList.add('destroy');
-
-
 const getLocalstorage = function () {
 	return JSON.parse(localStorage.getItem('tasksList')) ?? [];
 };
@@ -24,6 +11,12 @@ const updateLocalStorage = (tasks) => {
 	return JSON.parse(localStorage.getItem('tasksList')) ?? [];
 };
 
+const todoList = document.querySelector('.todo-list');
+const listItemTemplate = document.querySelector('#list-item-template').content.querySelector('li');
+listItemTemplate.querySelector('div').classList.add('view');
+listItemTemplate.querySelector('input').classList.add('toggle');
+listItemTemplate.querySelector('input').setAttribute('type', 'chekbox');
+listItemTemplate.querySelector('button').classList.add('destroy');
 const createListItem = function (task) {
 
 	let listItem = listItemTemplate.cloneNode(true);
@@ -41,27 +34,6 @@ const createListItem = function (task) {
 
 	return listItem;
 };
-const countActiveTasks = function (tasks) {
-	let activeTasksCounter = 0;
-	for (let i = 0; i < tasks.length; i++) {
-		if (!tasks[i].completed) {
-			activeTasksCounter++;
-		}
-	};
-	todoCountValue.textContent = activeTasksCounter;
-};
-const checkClearCompleted = function (tasks) {
-	for (let i = 0; i < tasks.length; i++) {
-		clearCompletedButton.style = "display: none";
-		if (tasks[i].completed) {
-			clearCompletedButton.style = "display: block";
-			break;
-		}
-	}
-};
-const checkFooter = function () {
-	footerSection.style = tasksList.length > 0 ? "display: block" : "display: none";
-};
 
 const fragment = document.createDocumentFragment();
 
@@ -77,11 +49,40 @@ const renderTasks = function (tasks) {
 	checkFooter();
 	updateLocalStorage(tasksList);
 };
-
 renderTasks(tasksList);
 
-const getId = function (idsDataArray) {
+const todoCountValue = document.querySelector('.todo-count strong');
+const countActiveTasks = function (tasks) {
+	let activeTasksCounter = 0;
+	for (let i = 0; i < tasks.length; i++) {
+		if (!tasks[i].completed) {
+			activeTasksCounter++;
+		}
+	};
+	todoCountValue.textContent = activeTasksCounter;
+};
 
+
+const clearCompletedButton = document.querySelector('.clear-completed');
+const checkClearCompleted = function (tasks) {
+	for (let i = 0; i < tasks.length; i++) {
+		clearCompletedButton.style = "display: none";
+		if (tasks[i].completed) {
+			clearCompletedButton.style = "display: block";
+			break;
+		}
+	}
+};
+clearCompletedButton.addEventListener('click', function () {
+	deleteCompletedTasks(tasksList);
+});
+
+const footerSection = document.querySelector('footer');
+const checkFooter = function () {
+	footerSection.style = tasksList.length > 0 ? "display: block" : "display: none";
+};
+
+const getId = function (idsDataArray) {
 	let currentTaskId = 0;
 
 	for (let i = 0; i < idsDataArray.length; i++) {
@@ -94,7 +95,6 @@ const getId = function (idsDataArray) {
 };
 
 const createNewTask = function (text) {
-
 	let newTask = {
 		id: getId(tasksList),
 		text: text,
@@ -134,9 +134,7 @@ const deleteCompletedTasks = function (tasks) {
 	renderTasks(tasksList);
 };
 
-clearCompletedButton.addEventListener('click', function () {
-	deleteCompletedTasks(tasksList);
-});
+const filtersLinks = document.querySelectorAll('.filters a');
 
 const filterTasks = function (tasks, filter) {
 	let sortedTaskList = [];
@@ -176,5 +174,4 @@ const checkFilter = function (tasks) {
 		}
 	});
 };
-
 checkFilter();
