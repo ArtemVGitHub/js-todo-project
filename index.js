@@ -35,22 +35,6 @@ const createListItem = function (task) {
 	return listItem;
 };
 
-const fragment = document.createDocumentFragment();
-
-const renderTasks = function (tasks) {
-
-	todoList.textContent = "";
-	for (let i = 0; i < tasks.length; i++) {
-		fragment.appendChild(createListItem(tasks[i]));
-	}
-	todoList.appendChild(fragment);
-	countActiveTasks(tasks);
-	checkClearCompleted(tasks);
-	checkFooter();
-	updateLocalStorage(tasksList);
-};
-renderTasks(tasksList);
-
 const todoCountValue = document.querySelector('.todo-count strong');
 const countActiveTasks = function (tasks) {
 	let activeTasksCounter = 0;
@@ -81,6 +65,22 @@ const footerSection = document.querySelector('footer');
 const checkFooter = function () {
 	footerSection.style = tasksList.length > 0 ? "display: block" : "display: none";
 };
+
+const fragment = document.createDocumentFragment();
+
+const renderTasks = function (tasks) {
+
+	todoList.textContent = "";
+	for (let i = 0; i < tasks.length; i++) {
+		fragment.appendChild(createListItem(tasks[i]));
+	}
+	todoList.appendChild(fragment);
+	countActiveTasks(tasks);
+	checkClearCompleted(tasks);
+	checkFooter();
+	updateLocalStorage(tasksList);
+};
+renderTasks(tasksList);
 
 const getId = function (idsDataArray) {
 	let currentTaskId = 0;
