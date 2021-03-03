@@ -2,7 +2,7 @@ const todoList = document.querySelector('.todo-list');
 const listItemTemplate = document.querySelector('#list-item-template').content.querySelector('li');
 listItemTemplate.querySelector('div').classList.add('view');
 listItemTemplate.querySelector('input').classList.add('toggle');
-listItemTemplate.querySelector('input').setAttribute('type', 'chekbox');
+listItemTemplate.querySelector('input').setAttribute('type', 'checkbox');
 listItemTemplate.querySelector('button').classList.add('destroy');
 const createListItem = function (task) {
 
